@@ -39,8 +39,12 @@
         <div class="w-fit max-w-full">
           <div class="max-w-full text-4xl font-bold">
             {{ currentNoteName }}
-            <span class="cursor-pointer hover:scale-105 transition ease-in-out duration-300">
-              <Icon class="pb-1" name="ep:edit-pen" size="23" @click="onShowEditName()" />
+            <span class="cursor-pointer">
+              <Icon
+                class="pb-1 hover:scale-105 transition ease-in duration-300"
+                name="ep:edit-pen"
+                size="23"
+                @click="onShowEditName()" />
             </span>
           </div>
         </div>
@@ -55,12 +59,12 @@
           v-for="(card, index) in cardList"
           :key="card.key"
           :style="`background-color: #${card.background};`"
-          class="cursor-pointer hover:scale-105 transition ease-in-out duration-300">
+          class="cursor-pointer hover:scale-105 transition ease-in-out duration-300 relative">
+          <div class="absolute" @click="() => onShowEditBackground(index)">
+            <Icon name="dashicons:color-picker" size="23" class="hover:scale-105 transition ease-in-out duration-300" />
+          </div>
           <NuxtLink :to="'/card/1'">
-            <div class="flex gap-x-2 justify-between items-center italic">
-              <div @click="() => onShowEditBackground(index)">
-                <Icon name="dashicons:color-picker" size="20" />
-              </div>
+            <div class="flex gap-x-2 justify-end items-center italic">
               <div>{{ moment(card.updatedAt).format(constants.dateTimeFormat) }}</div>
             </div>
             <div class="text-lg font-semibold pb-1">{{ card.name }}</div>

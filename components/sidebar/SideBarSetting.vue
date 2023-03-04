@@ -7,7 +7,7 @@
       data-drawer-backdrop="false"
       data-drawer-edge="false"
       type="button"
-      class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-yellow-100 hover:text-gray-900 focus:outline-none"
+      class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:scale-105 transition ease-in-out duration-300 focus:outline-none"
       @click="openAside">
       <span class="sr-only">Open sidebar</span>
       <svg
@@ -32,7 +32,7 @@
         type="button"
         :data-drawer-hide="props.idDefine"
         :aria-controls="props.idDefine"
-        class="block md:hidden text-gray-400 bg-transparent hover:bg-yellow-100 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center"
+        class="block md:hidden text-gray-400 bg-transparent hover:scale-105 transition ease-in-out duration-300 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center"
         @click="closeAside()">
         <svg
           aria-hidden="true"

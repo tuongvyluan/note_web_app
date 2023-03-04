@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex justify-between">
+  <div class="w-full flex justify-between px-4">
     <div class="w-full pr-2">
       <div class="pt-3 overflow-x-auto h-full">
         <div class="flex gap-12">
@@ -80,7 +80,9 @@
         <!-- Start task information -->
         <div class="text-xl font-semibold flex justify-between">
           <div><span @click="isSub = false">Task</span><span v-show="isSub"> > Subtask</span></div>
-          <div class="md:hidden block"><Icon name="mi:close" size="20" @click="closeTaskDetails" /></div>
+          <div class="md:hidden block hover:scale-105 transition ease-in duration-300">
+            <Icon name="mi:close" size="20" @click="closeTaskDetails" />
+          </div>
         </div>
         <div class="pt-4">
           <label class="font-semibold">Name</label>

@@ -10,6 +10,7 @@
 body {
   margin: 0;
   box-sizing: border-box;
+  background-color: #ffffff;
 }
 .notion-page-cover {
   max-width: 1000px;
