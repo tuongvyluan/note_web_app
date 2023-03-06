@@ -15,7 +15,7 @@
                   <label class="font-semibold">Select date:</label>
                   <VueDatePicker v-model="timerange" range class="w-[345px] z-20" />
                 </div>
-                <MyButton>Create task</MyButton>
+                <MyButton>Create Task</MyButton>
               </div>
               <!-- Start task list section -->
               <div class="font-semibold cursor-pointer w-full">
@@ -137,7 +137,7 @@
         <div v-show="!isSub">
           <div class="flex justify-between items-center pt-4">
             <div class="text-xl font-semibold">Subtasks</div>
-            <MyButton @click="isSub = true">Create subtask</MyButton>
+            <MyButton @click="isSub = true">Create Subtask</MyButton>
           </div>
           <!-- Start a task item -->
           <div class="border-b-2 border-gray-300 py-2 font-normal" @click="isSub = true">
