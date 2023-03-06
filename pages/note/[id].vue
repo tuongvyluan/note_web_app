@@ -35,20 +35,22 @@
       </template>
     </CardModal>
     <div class="px-4 w-full">
-      <div class="flex flex-wrap justify-between gap-x-1 items-center break-words">
+      <div>
         <div class="w-fit max-w-full">
-          <div class="max-w-full text-4xl font-bold">
-            {{ currentNoteName }}
+          <div class="max-w-full text-4xl font-bold flex flex-wrap">
+            <span class="max-w-[calc(100%-23px)] truncate">
+              {{ currentNoteName }}
+            </span>
             <span class="cursor-pointer">
               <Icon
-                class="pb-1 hover:scale-105 transition ease-in duration-300"
-                name="ep:edit-pen"
-                size="23"
+                class="pb-2 hover:scale-110 transition ease-in duration-300"
+                name="charm:pencil"
+                size="24"
                 @click="onShowEditName()" />
             </span>
           </div>
         </div>
-        <div class="italic">{{ moment(today).format(constants.dateTimeFormat) }}</div>
+        <div class="italic">Updated at: {{ moment(today).format(constants.dateTimeFormat) }}</div>
       </div>
     </div>
     <!-- Start note section -->
@@ -59,9 +61,9 @@
           v-for="(card, index) in cardList"
           :key="card.key"
           :style="`background-color: #${card.background};`"
-          class="cursor-pointer hover:scale-105 transition ease-in-out duration-300 relative">
+          class="cursor-pointer hover:scale-110 transition ease-in-out duration-300 relative">
           <div class="absolute" @click="() => onShowEditBackground(index)">
-            <Icon name="dashicons:color-picker" size="23" class="hover:scale-105 transition ease-in-out duration-300" />
+            <Icon name="dashicons:color-picker" size="19" class="hover:scale-110 transition ease-in-out duration-300" />
           </div>
           <NuxtLink :to="'/card/1'">
             <div class="flex gap-x-2 justify-end items-center italic">

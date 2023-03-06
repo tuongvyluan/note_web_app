@@ -80,7 +80,7 @@
         <!-- Start task information -->
         <div class="text-xl font-semibold flex justify-between">
           <div><span @click="isSub = false">Task</span><span v-show="isSub"> > Subtask</span></div>
-          <div class="md:hidden block hover:scale-105 transition ease-in duration-300">
+          <div class="md:hidden block hover:scale-110 transition ease-in duration-300">
             <Icon name="mi:close" size="20" @click="closeTaskDetails" />
           </div>
         </div>
