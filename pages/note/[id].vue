@@ -19,6 +19,24 @@
       </template>
     </CardModal>
     <CardModal
+      v-model="showNewCard"
+      accept-text="Create"
+      decline-text="Cancel"
+      :disable-accept="newCardName.trim().length === 0"
+      @close-modal="showNewCard = false"
+      @decline-modal="showNewCard = false"
+      @confirm-modal="onConfirmNewCard()">
+      <template #header>
+        <SectionTitle title="Create new card"></SectionTitle>
+      </template>
+      <template #body>
+        <div class="flex gap-2 items-center w-full">
+          <label>Card name</label>
+          <MyInput v-model="newCardName" w="w-[300px]" type="text" />
+        </div>
+      </template>
+    </CardModal>
+    <CardModal
       v-model="showEditBackground"
       accept-text="Save"
       decline-text="Cancel"
@@ -57,7 +75,9 @@
     <div class="py-4 px-4">
       <!-- Start card list -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1">
-        <CardBox class="cursor-pointer bg-gray-50 hover:scale-105 transition ease-in-out duration-300 relative">
+        <CardBox
+          class="cursor-pointer bg-gray-50 hover:scale-105 transition ease-in-out duration-300 relative"
+          @click="onShowNewCard()">
           <div class="h-[248px] flex flex-col justify-center">
             <Icon name="charm:plus" size="50" class="text-gray-700 self-center" />
           </div>
@@ -97,6 +117,17 @@ const newBackground = ref('')
 const currentCardId = ref('')
 const showEditBackground = ref(false)
 const currentCardIndex = ref(-1)
+const showNewCard = ref(false)
+const newCardName = ref('')
+
+function onShowNewCard() {
+  newCardName.value = ''
+  showNewCard.value = true
+}
+
+function onConfirmNewCard() {
+  showNewCard.value = false
+}
 
 function onShowEditName() {
   newNoteName.value = currentNoteName.value
