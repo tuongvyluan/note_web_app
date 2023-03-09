@@ -11,30 +11,36 @@
             <NuxtLink v-if="tab.to" :to="tab.to" @click="closeAllSubtab()">
               <a
                 :class="isActive === index ? 'text-white bg-gradient-to-r from-purple-500 to-blue-500' : ''"
-                class="flex items-center p-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer">
+                class="flex items-center py-2 pr-2 pl-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer">
                 <Icon size="23" :name="tabList[index].icon" />
                 <span class="ml-3">{{ tabList[index].name }}</span>
               </a>
             </NuxtLink>
-            <div v-else>
+            <div v-else class="relative">
               <div
-                class="flex justify-between items-center p-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer"
+                class="relative flex justify-start gap-x-2 items-center p-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer"
                 @click="tab.showList = !tab.showList">
+                <!-- <div class="pb-1">
+                  <Icon v-show="tab.showList === false" name="mi:chevron-right" size="23" />
+                  <Icon v-show="tab.showList === true" name="mi:chevron-down" size="23" />
+                </div> -->
                 <div class="flex items-center">
                   <Icon size="23" :name="tabList[index].icon" />
                   <span class="ml-3">{{ tabList[index].name }}</span>
                 </div>
-                <div>
-                  <Icon v-show="tab.showList === false" name="mi:chevron-down" size="23" />
-                  <Icon v-show="tab.showList === true" name="mi:chevron-up" size="23" />
+                <div class="absolute z-50 right-2 top-1.5">
+                  <Icon
+                    class="hover:scale-125 transition ease-in-out duration-300 text-gray-50"
+                    name="charm:plus"
+                    size="20" />
                 </div>
               </div>
-              <ul v-show="tab.showList" class="py-2 ml-2">
+              <ul v-show="tab.showList" class="pb-2 ml-2">
                 <li v-for="subtab in tab.subtabList" :key="subtab.to" class="pt-1">
                   <NuxtLink :to="subtab.to">
                     <a
                       :class="isActive === subtab.id ? 'text-white bg-gradient-to-r from-purple-500 to-blue-500' : ''"
-                      class="flex p-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer">
+                      class="flex py-2 pr-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer">
                       <span class="ml-3">{{ subtab.name }}</span>
                     </a>
                   </NuxtLink>
@@ -120,7 +126,7 @@ const isActive = computed(() => {
   if (path.at(1) === 't') {
     return 0
   }
-  if (path.at(1) === 'l') {
+  if (path.at(1) === 'l' || path.at(1) === 's') {
     return -2
   }
   if (path.at(1) === 'n') {

@@ -38,7 +38,7 @@
       <div>
         <div class="w-fit max-w-full">
           <div class="max-w-full text-4xl font-bold flex flex-wrap">
-            <span class="max-w-[calc(100%-23px)] truncate">
+            <span class="max-w-[calc(100%-25px)] truncate">
               {{ currentNoteName }}
             </span>
             <span class="cursor-pointer">
@@ -57,20 +57,25 @@
     <div class="py-4 px-4">
       <!-- Start card list -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1">
+        <CardBox class="cursor-pointer bg-gray-50 hover:scale-105 transition ease-in-out duration-300 relative">
+          <div class="h-[248px] flex flex-col justify-center">
+            <Icon name="charm:plus" size="50" class="text-gray-700 self-center" />
+          </div>
+        </CardBox>
         <CardBox
           v-for="(card, index) in cardList"
           :key="card.key"
           :style="`background-color: #${card.background};`"
-          class="cursor-pointer hover:scale-110 transition ease-in-out duration-300 relative">
+          class="cursor-pointer hover:scale-105 transition ease-in-out duration-300 relative">
           <div class="absolute" @click="() => onShowEditBackground(index)">
-            <Icon name="dashicons:color-picker" size="19" class="hover:scale-110 transition ease-in-out duration-300" />
+            <Icon name="dashicons:color-picker" size="19" class="hover:scale-125 transition ease-in-out duration-300" />
           </div>
           <NuxtLink :to="'/card/1'">
             <div class="flex gap-x-2 justify-end items-center italic">
               <div>{{ moment(card.updatedAt).format(constants.dateTimeFormat) }}</div>
             </div>
-            <div class="text-lg font-semibold pb-1">{{ card.name }}</div>
-            <div class="max-h-60 overflow-hidden text-justify">
+            <div class="text-xl font-semibold pb-1 line-clamp-1">{{ card.name }}</div>
+            <div class="h-48 line-clamp-8 text-justify">
               {{ card.content }}
             </div>
           </NuxtLink>
@@ -124,11 +129,12 @@ function getTimestamp() {
 const cardList = ref([
   {
     id: '1',
-    name: 'ASP.NET Core Razor Page 1',
-    content: 'Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page.',
+    name: 'ASP.NET Core Razor Page 1 ASP.NET Core Razor Page 1',
+    content:
+      'Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page.',
     background: 'D1EAED',
     updatedAt: today.value,
-    key: getTimestamp(),
+    key: getTimestamp() + 1,
   },
   {
     id: '2',
@@ -136,7 +142,7 @@ const cardList = ref([
     content: 'Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page.',
     background: 'B8F3ED',
     updatedAt: today.value,
-    key: getTimestamp(),
+    key: getTimestamp() + 2,
   },
   {
     id: '3',
@@ -144,7 +150,7 @@ const cardList = ref([
     content: 'Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page.',
     background: 'AAFADC',
     updatedAt: today.value,
-    key: getTimestamp(),
+    key: getTimestamp() + 3,
   },
   {
     id: '4',
@@ -152,7 +158,7 @@ const cardList = ref([
     content: 'Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page.',
     background: 'B2FEBE',
     updatedAt: today.value,
-    key: getTimestamp(),
+    key: getTimestamp() + 4,
   },
   {
     id: '4',
@@ -160,7 +166,7 @@ const cardList = ref([
     content: 'Building Website using ASP.NET Core Razor Page. Building Website using ASP.NET Core Razor Page.',
     background: 'CFFE97',
     updatedAt: today.value,
-    key: getTimestamp(),
+    key: getTimestamp() + 5,
   },
 ])
 </script>

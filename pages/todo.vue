@@ -76,10 +76,12 @@
         <MyButton type="outline">Delete {{ isSub ? 'Subtask' : 'Task' }}</MyButton>
         <MyButton>Save {{ isSub ? 'Subtask' : 'Task' }}</MyButton>
       </div>
-      <div class="py-3 pl-3 pr-2 bg-gray-50 rounded-t-2xl h-[calc(100%-62px)] overflow-auto cursor-pointer">
+      <div class="py-3 pl-3 pr-2 bg-gray-50 rounded-t-2xl h-[calc(100%-62px)] overflow-auto">
         <!-- Start task information -->
         <div class="text-xl font-semibold flex justify-between">
-          <div><span @click="isSub = false">Task</span><span v-show="isSub"> > Subtask</span></div>
+          <div>
+            <span class="cursor-pointer" @click="isSub = false">Task</span><span v-show="isSub"> > Subtask</span>
+          </div>
           <div class="md:hidden block hover:scale-110 transition ease-in duration-300">
             <Icon name="mi:close" size="20" @click="closeTaskDetails" />
           </div>

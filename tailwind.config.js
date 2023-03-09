@@ -17,6 +17,12 @@ export default {
       fontFamily: {
         sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
       },
+      lineClamp: {
+        7: '7',
+        8: '8',
+        9: '9',
+        10: '10',
+      },
     },
     colors: ({ colors }) => ({
       inherit: colors.inherit,
@@ -336,5 +342,9 @@ export default {
   },
   plugins: [
     require('flowbite'),
+    require('@tailwindcss/line-clamp'),
   ],
+  variants: {
+    lineClamp: ['responsive', 'hover']
+  }
 }
