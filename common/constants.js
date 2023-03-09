@@ -53,4 +53,14 @@ export default {
       name: 'Done',
     },
   ],
+  default: {
+    sortTypeNote: 0, // 0: updatedAt, 1: name
+    isAscNote: false,
+    sortTypeTask: 0, // 0: priority, 1: progress
+    isAscTask: false,
+  },
+  sortNote: {
+    name: 0,
+    updatedAt: 1,
+  },
 }

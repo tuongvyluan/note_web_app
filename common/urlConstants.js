@@ -1,5 +1,5 @@
 export default {
-  actions: {
+  endpoints: {
     notes: {
       base: '/notes',
       uri: {
@@ -8,12 +8,21 @@ export default {
     },
     cards: {
       base: '/cards',
+      uri: {
+        getByNote: '/{noteId}?sortType={sortType}&isAsc={isAsc}',
+      },
     },
     tasks: {
       base: '/tasks',
     },
     login: {
       base: '/login',
+    },
+    users: {
+      base: '/users',
+      uri: {
+        CREATE: '/create',
+      },
     },
   },
 }
