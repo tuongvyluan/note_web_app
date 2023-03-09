@@ -52,10 +52,10 @@
         </div>
       </template>
     </CardModal>
-    <div class="px-4 w-full">
+    <div class="pr-1 md:px-4 w-full">
       <div>
-        <div class="w-fit max-w-full">
-          <div class="max-w-full text-4xl font-bold flex flex-wrap">
+        <div class="w-full gap-1 justify-between flex flex-wrap max-w-full">
+          <div class="text-4xl font-bold flex flex-wrap sm:max-w-[60%] max-w-full">
             <span class="max-w-[calc(100%-25px)] truncate">
               {{ currentNoteName }}
             </span>
@@ -67,12 +67,36 @@
                 @click="onShowEditName()" />
             </span>
           </div>
+          <div class="italic pt-2 sm:py-2">{{ moment(today).format(constants.dateTimeFormat) }}</div>
         </div>
-        <div class="italic">Updated at: {{ moment(today).format(constants.dateTimeFormat) }}</div>
+        <div class="flex gap-x-1 items-center pt-2">
+          <DropdownMenu id-button="sortBtn" id-menu="sortMenu">
+            <template #button>
+              <div>
+                <span class="pr-2">{{ sortList.at(currentSort) }}</span>
+              </div>
+            </template>
+            <template #menu>
+              <ListGroup class="cursor-pointer w-36 max-h-48 overflow-y-auto">
+                <ListGroupItem
+                  v-for="(sort, index) in sortList"
+                  :key="index"
+                  :class="`${currentSort === index ? 'bg-blue-50 font-bold' : ''}`"
+                  class="px-6 py-1 hover:bg-blue-50"
+                  @click="currentSort = index">
+                  {{ sort }}</ListGroupItem
+                >
+              </ListGroup>
+            </template>
+          </DropdownMenu>
+          <div class="pb-1 cursor-pointer" @click="isAsc = !isAsc">
+            <Icon size="20" :name="isAsc ? 'fa-solid:sort-amount-up-alt' : 'fa-solid:sort-amount-down'" />
+          </div>
+        </div>
       </div>
     </div>
     <!-- Start note section -->
-    <div class="py-4 px-4">
+    <div class="py-4 pr-1 md:px-4">
       <!-- Start card list -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1">
         <CardBox
@@ -107,6 +131,7 @@
   </div>
 </template>
 <script setup>
+import { ListGroup, ListGroupItem } from 'flowbite-vue'
 import moment from 'moment'
 import constants from '~~/common/constants'
 const today = ref(new Date().getTime())
@@ -119,6 +144,9 @@ const showEditBackground = ref(false)
 const currentCardIndex = ref(-1)
 const showNewCard = ref(false)
 const newCardName = ref('')
+const sortList = ref(['Name', 'Last update'])
+const currentSort = ref(1)
+const isAsc = ref(false)
 
 function onShowNewCard() {
   newCardName.value = ''

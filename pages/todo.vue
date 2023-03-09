@@ -1,21 +1,23 @@
 <template>
-  <div class="w-full flex justify-between px-4">
+  <div class="w-full flex justify-between pr-1 md:px-4">
     <div class="w-full pr-2">
       <div class="pt-3 overflow-x-auto h-full">
-        <div class="flex gap-12">
-          <div class="text-4xl font-bold">Todo</div>
-          <div class="text-2xl font-semibold">2</div>
+        <div class="flex flex-wrap justify-between gap-2 items-center">
+          <div class="flex gap-12">
+            <div class="text-4xl font-bold">Todo</div>
+            <div class="text-2xl font-semibold">2</div>
+          </div>
+          <MyButton>Create Task</MyButton>
         </div>
         <!-- Start tasks section -->
         <section class="pt-5">
           <div class="w-full">
             <div class="w-full">
-              <div class="flex flex-wrap justify-between gap-2 items-baseline">
+              <div class="flex flex-wrap justify-start gap-2 items-baseline">
                 <div class="flex flex-wrap justify-start gap-2 items-center">
                   <label class="font-semibold">Select date:</label>
-                  <VueDatePicker v-model="timerange" range class="w-[345px] z-20" />
+                  <VueDatePicker v-model="timerange" :enable-time-picker="false" range class="w-[260px] z-20" />
                 </div>
-                <MyButton>Create Task</MyButton>
               </div>
               <!-- Start task list section -->
               <div class="font-semibold cursor-pointer w-full">
@@ -114,6 +116,10 @@
           </DropdownMenu>
         </div>
         <div class="pt-3 flex gap-x-2 items-center">
+          <div class="font-semibold w-[72px]">Start date</div>
+          <VueDatePicker v-model="currentStartDate" class="w-[200px]" />
+        </div>
+        <div class="pt-3 flex gap-x-2 items-center">
           <div class="font-semibold w-[72px]">Due date</div>
           <VueDatePicker v-model="currentDueDate" class="w-[200px]" />
         </div>
@@ -171,6 +177,7 @@ import { ListGroup, ListGroupItem } from 'flowbite-vue'
 import constants from '~~/common/constants'
 const currentTask = ref('Research content ideas')
 const currentDueDate = ref(null)
+const currentStartDate = ref(null)
 const timerange = ref(null)
 const currentPriority = ref(0)
 const currentStatus = ref(1)
@@ -192,3 +199,8 @@ function closeTaskDetails() {
   taskDetailsMenuSetting.classList.add('hidden')
 }
 </script>
+<style>
+.dp__input {
+  border-radius: 0.5rem;
+}
+</style>
