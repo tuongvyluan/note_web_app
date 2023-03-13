@@ -14,6 +14,16 @@ export default {
     },
     tasks: {
       base: '/tasks',
+      uri: {
+        getAll: '?orderBy={orderBy}&isAsc={isAsc}&dateFrom={dateFrom}&dateTo={dateTo}',
+        delete: '?id={id}',
+      },
+    },
+    taskItems: {
+      base: '/tasks/taskitems',
+      uri: {
+        delete: '?id={id}',
+      },
     },
     todo: {
       base: '/todo',

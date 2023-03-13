@@ -81,8 +81,8 @@ async function login() {
       .then(data => {
         const token = data.token
         if (token) {
-          storage.setStorageSync('token', token)
-          storage.setStorageSync('userId', data.userId)
+          storage.setStorageSync('token', token, 600000)
+          storage.setStorageSync('userId', data.userId, 600000)
           router.push(urlConstants.endpoints.todo.base)
         }
       })

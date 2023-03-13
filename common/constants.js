@@ -18,6 +18,7 @@ export default {
   },
   dateTimeFormat: 'MMM D, YY - HH:mm A',
   monthYearFormat: 'MMM YYYY',
+  shortDateFormat: 'DD-MM-YYYY',
   modalSize: {
     XS: 'xs',
     MD: 'md',

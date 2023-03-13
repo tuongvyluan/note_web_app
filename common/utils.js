@@ -1,5 +1,6 @@
 /* global useRuntimeConfig */
 import { useStorage } from 'vue3-storage'
+import userService from '~~/services/user.service'
 
 const storage = useStorage()
 
@@ -15,21 +16,33 @@ export async function useMyPostWithoutToken(path, data) {
 }
 
 export async function useMyFetch(path) {
+  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
+    userService.logout()
+  } else {
+    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
+    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
+  }
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: storage.getStorageSync('token'),
+      Authorization: 'bearer ' + storage.getStorageSync('token'),
     },
   })
 }
 
 export async function useMyPost(path, data) {
+  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
+    userService.logout()
+  } else {
+    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
+    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
+  }
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: storage.getStorageSync('token'),
+      Authorization: 'bearer ' + storage.getStorageSync('token'),
     },
     method: 'POST',
     body: JSON.stringify(data),
@@ -37,11 +50,17 @@ export async function useMyPost(path, data) {
 }
 
 export async function useMyPut(path, data) {
+  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
+    userService.logout()
+  } else {
+    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
+    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
+  }
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: storage.getStorageSync('token'),
+      Authorization: 'bearer ' + storage.getStorageSync('token'),
     },
     method: 'PUT',
     body: JSON.stringify(data),
@@ -49,11 +68,17 @@ export async function useMyPut(path, data) {
 }
 
 export async function useMyDelete(path) {
+  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
+    userService.logout()
+  } else {
+    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
+    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
+  }
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: storage.getStorageSync('token'),
+      Authorization: 'bearer ' + storage.getStorageSync('token'),
     },
     method: 'DELETE',
   })
@@ -82,5 +107,5 @@ export function setYearFilter(start, end) {
 }
 
 export function isEmpty(text) {
-  return text.trim() === ''
+  return typeof text === 'undefined' || text.trim() === ''
 }

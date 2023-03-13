@@ -20,15 +20,11 @@
               <div
                 class="relative flex justify-start gap-x-2 items-center p-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer"
                 @click="tab.showList = !tab.showList">
-                <!-- <div class="pb-1">
-                  <Icon v-show="tab.showList === false" name="mi:chevron-right" size="23" />
-                  <Icon v-show="tab.showList === true" name="mi:chevron-down" size="23" />
-                </div> -->
                 <div class="flex items-center">
                   <Icon size="23" :name="tabList[index].icon" />
                   <span class="ml-3">{{ tabList[index].name }}</span>
                 </div>
-                <div class="absolute z-50 right-2 top-1.5">
+                <div class="absolute z-50 right-2 top-1.5" @click="emits('showCreateNote')">
                   <Icon
                     class="hover:scale-125 transition ease-in-out duration-300 text-gray-50"
                     name="charm:plus"
@@ -58,8 +54,8 @@
                 <Icon size="23" name="majesticons:door-exit" />
                 <span class="ml-3">Log out</span>
               </a>
-            </li></NuxtLink
-          >
+            </li>
+          </NuxtLink>
         </ul>
       </div>
     </div>
@@ -67,7 +63,8 @@
 </template>
 <script setup>
 import { useStorage } from 'vue3-storage'
-import userService from '~~/services/user.service';
+import userService from '~~/services/user.service'
+import noteService from '~~/services/note.service'
 import urlConstants from '~~/common/urlConstants'
 import { isEmpty } from '~~/common/utils'
 
@@ -75,6 +72,7 @@ import { isEmpty } from '~~/common/utils'
 const storage = useStorage()
 const route = useRoute()
 const router = useRouter()
+const emits = defineEmits(['showCreateNote'])
 const tabList = ref([
   {
     name: 'Todo',
@@ -85,48 +83,7 @@ const tabList = ref([
     name: 'Note',
     icon: 'nimbus:sticky-note',
     showList: false,
-    subtabList: [
-      {
-        name: 'PRN',
-        to: '/note/1',
-        id: '1',
-      },
-      {
-        name: 'PRN',
-        to: '/note/2',
-        id: '2',
-      },
-      {
-        name: 'PRN',
-        to: '/note/3',
-        id: '3',
-      },
-      {
-        name: 'PRN',
-        to: '/note/4',
-        id: '4',
-      },
-      {
-        name: 'PRN',
-        to: '/note/5',
-        id: '5',
-      },
-      {
-        name: 'PRN',
-        to: '/note/6',
-        id: '6',
-      },
-      {
-        name: 'PRN',
-        to: '/note/7',
-        id: '7',
-      },
-      {
-        name: 'PRN',
-        to: '/note/8',
-        id: '8',
-      },
-    ],
+    subtabList: [],
   },
 ])
 const isActive = computed(() => {
@@ -157,11 +114,33 @@ function closeAllSubtab() {
 
 onMounted(() => {
   if (isActive.value !== -2) {
+    // Go to other pages
     if (!storage.hasKey('token') || isEmpty(storage.getStorageSync('token'))) {
+      // Without login
+      storage.clearStorageSync()
       router.push(urlConstants.endpoints.login.base)
+    } else {
+      noteService
+        .getAll()
+        .then(res => res.json())
+        .then(data => {
+          const subTabs = []
+          data.forEach(note => {
+            subTabs.push({
+              name: note.title,
+              to: '/note/' + note.id,
+              id: note.id,
+            })
+          })
+          tabList.value.at(1).subtabList = subTabs
+        })
     }
   } else if (storage.hasKey('token') && !isEmpty(storage.getStorageSync('token'))) {
-    router.push(urlConstants.endpoints.login.base)
+    // Already login but go to login or signup page
+    router.push(urlConstants.endpoints.todo.base)
+  } else {
+    // Go to login or signup page when not login
+    storage.clearStorageSync()
   }
 })
 </script>
