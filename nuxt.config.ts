@@ -9,7 +9,12 @@ export default defineNuxtConfig({
     common: resolve(__dirname, './common'),
   },
   modules: [['vue3-notion/nuxt', { css: true }], '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-icon'],
-  plugins: ['~/plugins/vue-datepicker.js', '~/plugins/vue3-colorpicker.js', '~/plugins/vue-quill.js'],
+  plugins: [
+    '~/plugins/vue-datepicker.js',
+    '~/plugins/toastification.js',
+    '~/plugins/vue3-colorpicker.js',
+    '~/plugins/vue-quill.js',
+  ],
   css: ['~/assets/css/style.css'],
   app: {
     head: {

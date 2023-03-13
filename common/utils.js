@@ -1,7 +1,7 @@
 /* global useRuntimeConfig */
-import { useUserStore } from '~~/stores/user'
+import { useStorage } from 'vue3-storage'
 
-const userStore = useUserStore()
+const storage = useStorage()
 
 export async function useMyPostWithoutToken(path, data) {
   const runtimeConfig = useRuntimeConfig()
@@ -19,7 +19,7 @@ export async function useMyFetch(path) {
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: userStore.getToken(),
+      Authentication: storage.getStorageSync('token'),
     },
   })
 }
@@ -29,7 +29,7 @@ export async function useMyPost(path, data) {
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: userStore.getToken(),
+      Authentication: storage.getStorageSync('token'),
     },
     method: 'POST',
     body: JSON.stringify(data),
@@ -41,7 +41,7 @@ export async function useMyPut(path, data) {
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: userStore.getToken(),
+      Authentication: storage.getStorageSync('token'),
     },
     method: 'PUT',
     body: JSON.stringify(data),
@@ -53,7 +53,7 @@ export async function useMyDelete(path) {
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
       'Content-Type': 'application/json',
-      Authentication: userStore.getToken(),
+      Authentication: storage.getStorageSync('token'),
     },
     method: 'DELETE',
   })
@@ -79,4 +79,8 @@ export function setYearFilter(start, end) {
     })
   }
   return years
+}
+
+export function isEmpty(text) {
+  return text.trim() === ''
 }

@@ -15,6 +15,9 @@ export default {
     tasks: {
       base: '/tasks',
     },
+    todo: {
+      base: '/todo',
+    },
     login: {
       base: '/login',
     },

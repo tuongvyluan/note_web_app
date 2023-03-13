@@ -5,7 +5,6 @@
         <div class="flex flex-wrap justify-between gap-2 items-center">
           <div class="flex gap-12">
             <div class="text-4xl font-bold">Todo</div>
-            <div class="text-2xl font-semibold">2</div>
           </div>
           <MyButton>Create Task</MyButton>
         </div>
@@ -22,7 +21,7 @@
               <!-- Start task list section -->
               <div class="font-semibold cursor-pointer w-full">
                 <!--Start task info-->
-                <div class="border-b-2 py-2" @click="openTaskDetails(), (isSub = false)">
+                <div class="border-b-2 py-2" @click="openTaskDetails(), viewTask('')">
                   <div>Research content ideas</div>
                   <div class="flex flex-wrap gap-x-6 text-sm">
                     <div class="flex gap-x-2 items-center pt-2">
@@ -43,7 +42,7 @@
                 </div>
                 <!--End task info-->
                 <!--Start subtasks-->
-                <div class="w-full pl-6" @click="openTaskDetails(), (isSub = true)">
+                <div class="w-full pl-6" @click="openTaskDetails(), viewTaskItem('', '')">
                   <div class="border-b-2 py-2 font-semibold cursor-pointer">
                     <div class="text-left flex justify-start">Research content ideas sub</div>
                     <div class="flex flex-wrap gap-x-6 text-sm">
@@ -69,28 +68,29 @@
         <!-- End tasks section -->
       </div>
     </div>
+    <!-- Start side menu section -->
     <div
       id="taskDetailsMenu"
-      class="min-w-[350px] h-full py-2 px-2 md:pr-2 z-40 md:block hidden right-0 absolute top-0 w-52 md:relative">
+      class="min-w-[350px] h-full py-2 px-2 md:pl-2 md:pr-0 z-40 md:block hidden right-0 absolute top-0 w-52 md:relative">
       <div
         id="taskDetailsMenuSetting"
         class="absolute bottom-2 left-2 rounded-b-2xl bg-gray-50 w-[calc(100%-16px)] flex justify-center gap-x-5 py-3">
         <MyButton type="outline">Delete {{ isSub ? 'Subtask' : 'Task' }}</MyButton>
-        <MyButton>Save {{ isSub ? 'Subtask' : 'Task' }}</MyButton>
+        <MyButton @on-click="saveTask()">Save {{ isSub ? 'Subtask' : 'Task' }}</MyButton>
       </div>
       <div class="py-3 pl-3 pr-2 bg-gray-50 rounded-t-2xl h-[calc(100%-62px)] overflow-auto">
         <!-- Start task information -->
         <div class="text-xl font-semibold flex justify-between">
           <div>
-            <span class="cursor-pointer" @click="isSub = false">Task</span><span v-show="isSub"> > Subtask</span>
+            <span class="cursor-pointer" @click="viewTask('')">Task</span><span v-show="isSub"> > Subtask</span>
           </div>
           <div class="md:hidden block hover:scale-110 transition ease-in duration-300">
             <Icon name="mi:close" size="20" @click="closeTaskDetails" />
           </div>
         </div>
         <div class="pt-4">
-          <label class="font-semibold">Name</label>
-          <MyInput type="text" placeholder="Add new task" :model-value="currentTask" w="w-full" />
+          <label class="font-semibold">Name<span class="text-red-500">*</span></label>
+          <MyInput type="text" placeholder="Add new task" :model-value="currentTaskTitle" w="w-full" />
         </div>
         <div class="pt-3">
           <label class="font-semibold">Description</label>
@@ -99,7 +99,7 @@
             placeholder="Add desscription"></textarea>
         </div>
         <div class="pt-3 flex gap-x-2 items-center">
-          <div class="font-semibold w-[72px]">Status</div>
+          <div class="font-semibold w-[80px]">Status<span class="text-red-500">*</span></div>
           <DropdownMenu id-button="statusBtn" id-menu="statusMenu">
             <template #button> {{ statusList.at(currentStatus).name }} </template>
             <template #menu>
@@ -116,15 +116,15 @@
           </DropdownMenu>
         </div>
         <div class="pt-3 flex gap-x-2 items-center">
-          <div class="font-semibold w-[72px]">Start date</div>
+          <div class="font-semibold w-[80px]">Start date<span class="text-red-500">*</span></div>
           <VueDatePicker v-model="currentStartDate" class="w-[200px]" />
         </div>
-        <div class="pt-3 flex gap-x-2 items-center">
-          <div class="font-semibold w-[72px]">Due date</div>
+        <div v-if="isSub" class="pt-3 flex gap-x-2 items-center">
+          <div class="font-semibold w-[80px]">Due date<span class="text-red-500">*</span></div>
           <VueDatePicker v-model="currentDueDate" class="w-[200px]" />
         </div>
         <div class="pt-3 flex gap-x-2 items-center">
-          <div class="font-semibold w-[72px]">Priority</div>
+          <div class="font-semibold w-[80px]">Priority<span class="text-red-500">*</span></div>
           <DropdownMenu :id-button="'priorityBtn'" :id-menu="'priorityMenu'">
             <template #button> {{ priorities.at(currentPriority).name }} </template>
             <template #menu>
@@ -148,19 +148,19 @@
             <MyButton @click="isSub = true">Create Subtask</MyButton>
           </div>
           <!-- Start a task item -->
-          <div class="border-b-2 border-gray-300 py-2 font-normal" @click="isSub = true">
-            <div class="pl-3">
-              <div>Research content ideas sub</div>
+          <div v-if="subList.length > 1" class="border-b-2 border-gray-300 py-2 font-normal" @click="isSub = true">
+            <div v-for="sub in subList" :key="sub.id" class="pl-3">
+              <div>{{ sub.title }}</div>
               <div class="flex gap-x-6 text-sm">
                 <div class="flex gap-x-2 items-center">
                   <Icon name="ep:calendar" size="20" />
-                  <div>02-02-23</div>
+                  <div>{{ sub.deadline }}</div>
                 </div>
                 <div class="flex gap-x-2 text-sm items-center">
-                  <StatusPill color="p3">LOW</StatusPill>
+                  <StatusPill color="p3">{{ priorities.at(sub.priority).name }}</StatusPill>
                 </div>
                 <div class="flex gap-x-2 text-sm items-center">
-                  <StatusPill color="p1">Progress</StatusPill>
+                  <StatusPill color="p1">{{ statusList.at(sub.progress).name }}</StatusPill>
                 </div>
               </div>
             </div>
@@ -170,21 +170,63 @@
         <!-- End task item list information -->
       </div>
     </div>
+    <!-- End side menu section -->
   </div>
 </template>
 <script setup>
+import { useStorage } from 'vue3-storage'
 import { ListGroup, ListGroupItem } from 'flowbite-vue'
 import constants from '~~/common/constants'
-const currentTask = ref('Research content ideas')
-const currentDueDate = ref(null)
-const currentStartDate = ref(null)
+const storage = useStorage()
+const today = ref(new Date())
+const currentTaskId = ref('')
+const currentTaskItemId = ref('')
+const currentTaskTitle = ref('')
+const currentDueDate = ref(today)
+const currentStartDate = ref(today)
 const timerange = ref(null)
 const currentPriority = ref(0)
-const currentStatus = ref(1)
+const currentStatus = ref(0)
 const isSub = ref(false)
+const subList = ref([
+  // {
+  //   id: '1',
+  //   name: '',
+  //   deadline: null,
+  //   priority: 0,
+  //   progress: 0,
+  // },
+])
 const priorities = ref(constants.priorities)
 const statusList = ref(constants.statusList)
 
+// Save
+function saveTask() {
+  if (currentTaskId.value === '') {
+    const task = {
+      userId: storage.getStorageSync('userId'),
+      title: currentTaskTitle.value,
+      priority: currentPriority.value,
+      progress: currentStatus.value,
+      startDate: currentStartDate.value,
+    }
+    console.log(task)
+  }
+}
+
+// On click task or task item
+function viewTask(taskId) {
+  isSub.value = false
+  currentTaskId.value = taskId
+}
+
+function viewTaskItem(taskId, taskItemId) {
+  isSub.value = true
+  currentTaskId.value = taskId
+  currentTaskItemId.value = taskItemId
+}
+
+// function handle task details side menu on small screen
 function openTaskDetails() {
   const taskDetailsMenu = document.getElementById('taskDetailsMenu')
   const taskDetailsMenuSetting = document.getElementById('taskDetailsMenuSetting')

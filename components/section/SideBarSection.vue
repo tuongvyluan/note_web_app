@@ -66,7 +66,15 @@
   </SidebarSideBarSetting>
 </template>
 <script setup>
+import { useStorage } from 'vue3-storage'
+import userService from '~~/services/user.service';
+import urlConstants from '~~/common/urlConstants'
+import { isEmpty } from '~~/common/utils'
+
+// const userStore = useUserStore()
+const storage = useStorage()
 const route = useRoute()
+const router = useRouter()
 const tabList = ref([
   {
     name: 'Todo',
@@ -134,10 +142,9 @@ const isActive = computed(() => {
   }
   return -1
 })
-const isLogout = ref(false)
 
 function logout() {
-  isLogout.value = true
+  userService.logout()
 }
 
 function closeAllSubtab() {
@@ -147,4 +154,14 @@ function closeAllSubtab() {
     }
   })
 }
+
+onMounted(() => {
+  if (isActive.value !== -2) {
+    if (!storage.hasKey('token') || isEmpty(storage.getStorageSync('token'))) {
+      router.push(urlConstants.endpoints.login.base)
+    }
+  } else if (storage.hasKey('token') && !isEmpty(storage.getStorageSync('token'))) {
+    router.push(urlConstants.endpoints.login.base)
+  }
+})
 </script>

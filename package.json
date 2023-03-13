@@ -32,9 +32,11 @@
     "eslint-plugin-nuxt": "^4.0.0",
     "flowbite": "^1.6.3",
     "flowbite-vue": "^0.0.10",
-    "uuid": "^9.0.0",
     "vue-color-kit": "^1.0.5",
+    "vue-toastification": "^2.0.0-rc.5",
     "vue3-colorpicker": "^2.1.2",
-    "vue3-notion": "^0.1.40"
+    "vue3-notion": "^0.1.40",
+    "vue3-storage": "^0.1.11",
+    "vue3-uuid": "^1.0.0"
   }
 }

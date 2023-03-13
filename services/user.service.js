@@ -1,6 +1,6 @@
+import { useStorage } from 'vue3-storage'
 import urlConstants from '~~/common/urlConstants'
 import { useMyPostWithoutToken } from '~~/common/utils'
-import { useUserStore } from '~~/stores/user'
 
 export default {
   async createUser(user) {
@@ -14,6 +14,6 @@ export default {
   },
 
   logout() {
-    useUserStore().setToken('')
+    useStorage().clearStorageSync()
   },
 }
