@@ -111,7 +111,7 @@
               </div>
               <!-- End Confirm Password input -->
               <div class="flex justify-center">
-                <MyButton @on-click="signup">Sign up</MyButton>
+                <MyButton :disabled="!validate" @on-click="signup">Sign up</MyButton>
               </div>
             </div>
             <!-- End login in-app -->
@@ -148,14 +148,14 @@ const user = ref({
 
 const msg = ref('')
 async function signup() {
-  const validateResult = validate()
+  const validateResult = validate
   if (validateResult) {
     await userService
       .createUser(user.value)
       .then(res => res.json())
       .then(data => {
         if (data.id) {
-          toast.toastSuccess('Create user successfully')
+          toast.toastSuccess('Create user successfully.')
           router.push(urlConstants.endpoints.login.base)
         }
       })
@@ -163,7 +163,7 @@ async function signup() {
     toast.toastError(msg.value)
   }
 }
-function validate() {
+const validate = computed(() => {
   let result = true
   if (isEmpty(user.value.firstName)) {
     result = false
@@ -188,5 +188,5 @@ function validate() {
     result = false
   }
   return result
-}
+})
 </script>

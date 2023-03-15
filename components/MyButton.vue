@@ -10,13 +10,13 @@
     </Button>
     <Button
       v-if="type === constants.buttonTypes.OUTLINE && !disabled"
-      :class="w"
+      :class="[w, h]"
       gradient="purple-blue"
       outline
       @click="emit('onClick')">
       <slot />
     </Button>
-    <Button v-if="type === constants.buttonTypes.ACTION && disabled" gradient="purple-blue" :class="w" disabled>
+    <Button v-if="type === constants.buttonTypes.ACTION && disabled" gradient="purple-blue" :class="[w, h]" disabled>
       <slot />
     </Button>
     <Button
@@ -24,7 +24,7 @@
       gradient="purple-blue"
       outline
       disabled
-      :class="w">
+      :class="[w, h]">
       <slot />
     </Button>
   </div>

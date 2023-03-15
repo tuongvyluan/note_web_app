@@ -2,8 +2,6 @@ import { useStorage } from 'vue3-storage'
 import urlConstants from '~~/common/urlConstants'
 import { useMyPostWithoutToken } from '~~/common/utils'
 
-const router = useRouter()
-
 export default {
   async createUser(user) {
     const url = urlConstants.endpoints.users.base + urlConstants.endpoints.users.uri.CREATE
@@ -16,6 +14,7 @@ export default {
   },
 
   logout() {
+    const router = useRouter()
     useStorage().clearStorageSync()
     router.push(urlConstants.endpoints.login.base)
   },

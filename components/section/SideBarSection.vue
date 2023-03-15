@@ -19,7 +19,7 @@
             <div v-else class="relative">
               <div
                 class="relative flex justify-start gap-x-2 items-center p-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer"
-                @click="tab.showList = !tab.showList">
+                @click="showNotes(tab)">
                 <div class="flex items-center">
                   <Icon size="23" :name="tabList[index].icon" />
                   <span class="ml-3">{{ tabList[index].name }}</span>
@@ -31,8 +31,8 @@
                     size="20" />
                 </div>
               </div>
-              <ul v-show="tab.showList" class="pb-2 ml-2">
-                <li v-for="subtab in tab.subtabList" :key="subtab.to" class="pt-1">
+              <ul v-show="tab.showList" class="pb-2 ml-2 pt-1">
+                <li v-for="subtab in noteStore.getNoteList()" :key="subtab.to" class="pt-1">
                   <NuxtLink :to="subtab.to">
                     <a
                       :class="isActive === subtab.id ? 'text-white bg-gradient-to-r from-purple-500 to-blue-500' : ''"
@@ -63,13 +63,16 @@
 </template>
 <script setup>
 import { useStorage } from 'vue3-storage'
+import { useNoteStore } from '~~/stores/note'
 import userService from '~~/services/user.service'
 import noteService from '~~/services/note.service'
 import urlConstants from '~~/common/urlConstants'
 import { isEmpty } from '~~/common/utils'
 
 // const userStore = useUserStore()
+const noteStore = useNoteStore()
 const storage = useStorage()
+const loadNotes = ref(false)
 const route = useRoute()
 const router = useRouter()
 const emits = defineEmits(['showCreateNote'])
@@ -82,8 +85,7 @@ const tabList = ref([
   {
     name: 'Note',
     icon: 'nimbus:sticky-note',
-    showList: false,
-    subtabList: [],
+    showList: true,
   },
 ])
 const isActive = computed(() => {
@@ -112,6 +114,31 @@ function closeAllSubtab() {
   })
 }
 
+function showNotes(tab) {
+  if (!loadNotes.value) {
+    getAllNotes()
+  }
+  tab.showList = !tab.showList
+}
+
+function getAllNotes() {
+  noteService
+    .getAll()
+    .then(res => res.json())
+    .then(data => {
+      const subTabs = []
+      data.forEach(note => {
+        subTabs.push({
+          name: note.title,
+          to: '/note/' + note.id,
+          id: note.id,
+        })
+      })
+      noteStore.setNoteList(subTabs)
+      loadNotes.value = true
+    })
+}
+
 onMounted(() => {
   if (isActive.value !== -2) {
     // Go to other pages
@@ -120,20 +147,7 @@ onMounted(() => {
       storage.clearStorageSync()
       router.push(urlConstants.endpoints.login.base)
     } else {
-      noteService
-        .getAll()
-        .then(res => res.json())
-        .then(data => {
-          const subTabs = []
-          data.forEach(note => {
-            subTabs.push({
-              name: note.title,
-              to: '/note/' + note.id,
-              id: note.id,
-            })
-          })
-          tabList.value.at(1).subtabList = subTabs
-        })
+      getAllNotes()
     }
   } else if (storage.hasKey('token') && !isEmpty(storage.getStorageSync('token'))) {
     // Already login but go to login or signup page

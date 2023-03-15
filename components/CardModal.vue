@@ -11,10 +11,10 @@
     <template #footer>
       <slot name="footer">
         <div class="flex justify-end gap-3">
-          <MyButton type="outline" @click="emit('decline-modal')">
+          <MyButton type="outline" @on-click="emit('decline-modal')">
             {{ props.declineText }}
           </MyButton>
-          <MyButton :disabled="disableAccept" @click="emit('confirm-modal')">
+          <MyButton :disabled="disableAccept" @on-click="emitConfirm()">
             {{ props.acceptText }}
           </MyButton>
         </div>
@@ -58,4 +58,10 @@ const isShowModal = computed({
     emit('update:modelValue', value)
   },
 })
+
+function emitConfirm() {
+  if (!props.disableAccept) {
+    emit('confirm-modal')
+  }
+}
 </script>

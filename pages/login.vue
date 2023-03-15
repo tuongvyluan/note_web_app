@@ -43,7 +43,7 @@
                 <div><a class="notion-link">Forgot password</a></div>
               </div>
               <div class="flex justify-center">
-                <MyButton @on-click="login">Login</MyButton>
+                <MyButton :disabled="!validate" @on-click="login">Login</MyButton>
               </div>
             </div>
             <!-- End login in-app -->
@@ -74,27 +74,29 @@ const user = ref({
 const msg = ref('')
 
 async function login() {
-  if (validate()) {
+  if (validate) {
     await userService
       .login(user.value)
       .then(res => res.json())
       .then(data => {
         const token = data.token
         if (token) {
-          storage.setStorageSync('token', token, 600000)
+          storage.setStorageSync('token', token.token, 600000)
+          storage.setStorageSync('expire', new Date(token.expires).getTime(), 60000)
           storage.setStorageSync('userId', data.userId, 600000)
+          storage.setStorageSync('email', user.value.email, 60000)
+          storage.setStorageSync('password', user.value.password, 60000)
           router.push(urlConstants.endpoints.todo.base)
         }
       })
-      .catch(error => {
+      .catch(_error => {
         toast.toastError('Incorrect email or password')
-        console.log(error)
       })
   } else {
     toast.toastError(msg.value)
   }
 }
-function validate() {
+const validate = computed(() => {
   let result = true
   if (isEmpty(user.value.email)) {
     result = false
@@ -106,5 +108,5 @@ function validate() {
     msg.value = 'Fields with * cannot be skipped.'
   }
   return result
-}
+})
 </script>

@@ -9,8 +9,8 @@ export const useNoteStore = defineStore('note', {
     getNoteList() {
       return this.noteList
     },
-    loadNoteList() {
-      this.noteList = []
+    setNoteList(newList) {
+      this.noteList = newList
     },
     addNote(newNote) {
       this.noteList.push(newNote)
@@ -20,6 +20,9 @@ export const useNoteStore = defineStore('note', {
       if (index > -1) {
         this.noteList.splice(index, 1)
       }
+    },
+    setCurrentNoteId(noteId) {
+      this.currentNoteId = noteId
     },
   },
 })

@@ -33,7 +33,7 @@ const updateLoadingToast = (id, message, isError) => {
   const options = {
     icon: true,
     type: isError ? 'error' : 'success',
-    timeout: isError ? false : 3000,
+    timeout: isError ? false : 2000,
     toastClassName: isError ? 'my-toast-error-color' : 'my-toast-success-color',
   }
   toast.update(id, {
@@ -48,7 +48,7 @@ const closeToast = id => {
 const toastInformation = message => {
   const options = {
     type: 'info',
-    timeout: 3000,
+    timeout: 2000,
     toastClassName: 'my-toast-default-color',
   }
   toast(message, options)
@@ -56,7 +56,7 @@ const toastInformation = message => {
 const toastSuccess = message => {
   const options = {
     type: 'success',
-    timeout: 3000,
+    timeout: 2000,
     toastClassName: 'my-toast-success-color',
   }
   toast(message, options)
@@ -64,7 +64,7 @@ const toastSuccess = message => {
 const toastError = message => {
   const options = {
     type: 'error',
-    timeout: 3000,
+    timeout: 2000,
     toastClassName: 'my-toast-error-color',
   }
   toast(message, options)

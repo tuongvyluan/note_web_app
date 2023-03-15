@@ -16,12 +16,8 @@ export async function useMyPostWithoutToken(path, data) {
 }
 
 export async function useMyFetch(path) {
-  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
-    userService.logout()
-  } else {
-    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
-    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
-  }
+  await checkExpire()
+
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
@@ -32,12 +28,8 @@ export async function useMyFetch(path) {
 }
 
 export async function useMyPost(path, data) {
-  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
-    userService.logout()
-  } else {
-    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
-    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
-  }
+  await checkExpire()
+
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
@@ -50,12 +42,8 @@ export async function useMyPost(path, data) {
 }
 
 export async function useMyPut(path, data) {
-  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
-    userService.logout()
-  } else {
-    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
-    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
-  }
+  await checkExpire()
+
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
@@ -68,12 +56,8 @@ export async function useMyPut(path, data) {
 }
 
 export async function useMyDelete(path) {
-  if (isEmpty(storage.getStorageSync('token')) || isEmpty(storage.getStorageSync('userId'))) {
-    userService.logout()
-  } else {
-    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
-    storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
-  }
+  await checkExpire()
+
   const runtimeConfig = useRuntimeConfig()
   return await fetch(runtimeConfig.public.apiBase + path, {
     headers: {
@@ -108,4 +92,36 @@ export function setYearFilter(start, end) {
 
 export function isEmpty(text) {
   return typeof text === 'undefined' || text.trim() === ''
+}
+
+export async function checkExpire() {
+  if (checkEmptyStorage()) {
+    userService.logout()
+  } else if (new Date().getTime() >= storage.getStorageSync('expire')) {
+    const user = {
+      email: storage.getStorageSync('email'),
+      password: storage.getStorageSync('password'),
+    }
+    await userService
+      .login(user)
+      .then(res => res.json())
+      .then(data => {
+        const token = data.token
+        storage.setStorageSync('token', token.token, 600000)
+        storage.setStorageSync('expire', new Date(token.expires).getTime(), 60000)
+      })
+      .catch(e => {
+        userService.logout()
+      })
+  } else {
+    storage.setStorageSync('token', storage.getStorageSync('token'), 600000)
+    storage.setStorageSync('expire', storage.getStorageSync('expire'), 600000)
+  }
+  storage.setStorageSync('userId', storage.getStorageSync('userId'), 600000)
+  storage.setStorageSync('email', storage.getStorageSync('email'), 600000)
+  storage.setStorageSync('password', storage.getStorageSync('password'), 600000)
+}
+
+export function checkEmptyStorage() {
+  return isEmpty(storage.getStorageSync('token'))
 }

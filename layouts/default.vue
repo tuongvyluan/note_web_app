@@ -1,6 +1,10 @@
 <template>
   <div class="w-full flex justify-start gap-x-2 h-screen relative overflow-y-hidden">
-    <SectionSideBarSection :key="noteKey" class="rounded-3xl" :is-active="1" @show-create-note="onShowCreateNote" />
+    <SectionSideBarSection
+      :key="noteStore.getNoteList().length"
+      class="rounded-3xl"
+      :is-active="1"
+      @show-create-note="onShowCreateNote" />
     <CardModal
       v-model="showCreateNote"
       accept-text="Save"
@@ -24,10 +28,11 @@
 </template>
 <script setup>
 import { useStorage } from 'vue3-storage'
+import { useNoteStore } from '~~/stores/note'
 import noteService from '~~/services/note.service'
 // create note
+const noteStore = useNoteStore()
 const storage = useStorage()
-const noteKey = ref(new Date().getTime())
 const showCreateNote = ref(false)
 const newNoteName = ref('')
 function onShowCreateNote() {
@@ -42,7 +47,11 @@ function onConfirmCreateNote() {
     })
     .then(res => res.json())
     .then(data => {
-      noteKey.value = new Date().getTime()
+      noteStore.addNote({
+        note: newNoteName.value,
+        to: '/note/' + data.noteid,
+        id: data.noteid,
+      })
     })
   showCreateNote.value = false
 }

@@ -3,13 +3,15 @@ export default {
     notes: {
       base: '/notes',
       uri: {
-        update: '/{noteId}',
+        delete: '?id={id}',
       },
     },
     cards: {
       base: '/cards',
       uri: {
-        getByNote: '/{noteId}?sortType={sortType}&isAsc={isAsc}',
+        getByNote: '?noteId={noteId}&orderBy={sortType}&isAsc={isAsc}',
+        getById: '/{cardId}',
+        deleteCard: '?id={cardId}',
       },
     },
     tasks: {
