@@ -39,5 +39,8 @@ export default {
         CREATE: '/create',
       },
     },
+    signup: {
+      base: '/signup',
+    },
   },
 }

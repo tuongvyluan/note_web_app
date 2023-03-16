@@ -37,7 +37,7 @@
                     <a
                       :class="isActive === subtab.id ? 'text-white bg-gradient-to-r from-purple-500 to-blue-500' : ''"
                       class="flex py-2 pr-2 text-base font-semibold text-gray-900 rounded-lg hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 cursor-pointer">
-                      <span class="ml-3">{{ subtab.name }}</span>
+                      <span class="ml-3 overflow-hidden">{{ subtab.name }}</span>
                     </a>
                   </NuxtLink>
                 </li>

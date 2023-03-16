@@ -39,9 +39,6 @@
                 </div>
               </div>
               <!-- End Password input -->
-              <div class="pb-3 flex justify-between text-sm h-11">
-                <div><a class="notion-link">Forgot password</a></div>
-              </div>
               <div class="flex justify-center">
                 <MyButton :disabled="!validate" @on-click="login">Login</MyButton>
               </div>

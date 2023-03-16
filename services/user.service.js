@@ -4,7 +4,7 @@ import { useMyPostWithoutToken } from '~~/common/utils'
 
 export default {
   async createUser(user) {
-    const url = urlConstants.endpoints.users.base + urlConstants.endpoints.users.uri.CREATE
+    const url = urlConstants.endpoints.signup.base
     return await useMyPostWithoutToken(url, user)
   },
 
